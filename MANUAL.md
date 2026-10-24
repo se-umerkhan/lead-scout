@@ -16,20 +16,44 @@
 4. Verify the input tab names, column headers, and output tab.
 5. Configure the business-search API node.
 
-## Google Sheets
+## Google Sheets Structure
 
-Maintain separate inputs for locations and business niches, plus a dedicated output tab.
+Lead Scout uses Google Sheets to manage search inputs and store discovered leads. The spreadsheet contains three logical sheets.
 
-Example locations:
-- F-7 Markaz, Islamabad
-- Blue Area, Islamabad
+### 1. Locations
 
-Example niches:
-- Dental Clinics
-- Restaurants
-- Real Estate Agencies
+Defines the geographic areas to search.
 
-Use the exact tab names and column headers expected by the imported workflow.
+| Column | Description |
+|---|---|
+| `Locations` | The target area or location to search. |
+| `Status` | Tracks the processing status of the location. |
+
+### 2. Niches
+
+Defines the business categories to discover.
+
+| Column | Description |
+|---|---|
+| `Niches` | The business niche or category to search for. |
+
+### 3. Results
+
+Stores the business records collected by the workflow and tracks outreach activity.
+
+| Column | Description |
+|---|---|
+| `Name` | Name of the discovered business. |
+| `Address` | Business address returned by the search provider. |
+| `Place ID` | Unique place identifier, when provided by the search API. |
+| `Location` | Target location associated with the search. |
+| `Category` | Business niche or category used for discovery. |
+| `Email` | Available business email address. |
+| `Outreach Status` | Tracks the email outreach state. |
+| `Sent At` | Timestamp when the outreach email was sent. |
+
+**Important:** Use these exact column names and capitalization in Google Sheets. The spreadsheet structure must match the field mappings configured in the n8n workflow.
+
 
 ## Google OAuth Setup
 
