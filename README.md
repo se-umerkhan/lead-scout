@@ -36,7 +36,7 @@ Google Sheets → n8n → Business Search API → Data Processing → Google She
 - **Google Sheets:** Input management and lead storage
 - **Business Search API:** Business discovery
 - **Google OAuth 2.0:** Google service authorization
-- **Email Integration:** Optional outreach automation
+- **Email Integration:** Outreach automation
 
 ## Getting Started
 
@@ -47,10 +47,6 @@ Google Sheets → n8n → Business Search API → Data Processing → Google She
 5. Verify the results before expanding the search.
 
 See [MANUAL.md](MANUAL.md) for setup instructions.
-
-## Important Notes
-
-Business discovery does not guarantee verified email addresses, qualified prospects, or successful email delivery. Email enrichment and outreach depend on the configured integrations. Follow applicable API terms, privacy requirements, and email marketing regulations.
 
 ## License
 
