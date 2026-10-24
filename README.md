@@ -52,7 +52,7 @@ Google Sheets → n8n → Business Search API → Data Processing → Results Sh
 5. Test with one location and one niche.
 6. Verify the results before expanding the search.
 
-See [MANUAL.md](MANUAL.md) for setup instructions.
+See [Manual.md](Manual.md) for setup instructions.
 
 
 ## License
