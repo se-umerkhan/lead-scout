@@ -1,0 +1,1764 @@
+{
+  "name": "Lead Scout",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "34cc9b37-3661-4771-9748-ac954a12a473",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        96,
+        496
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fa469a25-eb00-4011-a626-87fae7fb8bbd",
+              "name": "gs_url",
+              "type": "string",
+              "value": "YOUR_GOOGLE_SHEET_URL"
+            },
+            {
+              "id": "df0a7a51-0ec6-47d2-9f73-bc8268385305",
+              "name": "nichesSheet",
+              "type": "string",
+              "value": "Niches"
+            },
+            {
+              "id": "a1ff9a58-9ae6-4000-9fcd-6c11de23bd48",
+              "name": "briefingSheet",
+              "type": "string",
+              "value": "Briefing"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "feb1fbf0-084f-4cbe-a782-93f5ef950d10",
+      "name": "Settings",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        96,
+        272
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_URL",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Briefing",
+          "mode": "name"
+        },
+        "combineFilters": "AND",
+        "options": {}
+      },
+      "id": "a64ec977-cfe3-47df-ad37-965b936383ad",
+      "name": "GS - Get Locations",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        336,
+        80
+      ],
+      "executeOnce": true,
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3d16d922-0ed3-4a0f-9707-43797438970d",
+              "name": "location",
+              "type": "string",
+              "value": "={{ $json['Location'] }}"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "8be8b5c2-2269-4188-9c37-c4136d203e76",
+      "name": "Locations",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        528,
+        80
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9f5a5e37-faae-45db-8a22-ad7d5786ecfe",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.Status || '' }}",
+              "rightValue": "Pending"
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "e9a53d1d-8d13-4a6f-a248-49077482affd",
+      "name": "Filter Locations",
+      "type": "n8n-nodes-base.filter",
+      "position": [
+        736,
+        80
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4c5ad6be-28aa-455f-8ee2-edce1ab1bdbb",
+              "name": "row_number",
+              "type": "number",
+              "value": "={{ $json.row_number }}"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "93741e23-356f-47ea-98af-346754624677",
+      "name": "Set Row Number",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        928,
+        80
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "row_number",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "id": "9908622b-3b13-4b08-90ac-e4a6386c2e49",
+      "name": "Split Out",
+      "type": "n8n-nodes-base.splitOut",
+      "position": [
+        1152,
+        80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "3c062b6e-cd1a-4c5c-88b9-2576e3a13f63",
+      "name": "Loop Locations",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        432,
+        288
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_URL",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Niches",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "bde7cd13-c0e1-4db8-8c0a-81c92625f94b",
+      "name": "GS - Get Niches",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        624,
+        352
+      ],
+      "executeOnce": true,
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "b64333b6-67ce-47c4-a2cc-07303278d178",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              },
+              "leftValue": "={{ $json.STATUS || $json.Status || '' }}",
+              "rightValue": "Ignore"
+            },
+            {
+              "id": "b64333b6-67ce-47c4-a2cc-07303278d179",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.Niches || '' }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0a53aa2a-2af5-4ef7-a0b8-0f66e6066936",
+      "name": "Filter Niches",
+      "type": "n8n-nodes-base.filter",
+      "position": [
+        832,
+        352
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d3470f6f-c66e-4223-bbf5-81e45201d45d",
+              "name": "Niches",
+              "type": "string",
+              "value": "={{ $json.Niches }}"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "291fd265-aa65-41fe-b7d3-633553b86fcc",
+      "name": "Set Niche",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1024,
+        352
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": "={{ $prevNode.name === 'Set Niche' }}"
+        }
+      },
+      "id": "7c0e32ed-f982-4e3a-8c82-bc1bc6461dfc",
+      "name": "Loop Niches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        528,
+        624
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7b1629c5-cbfe-4769-8286-66b46c51cd7e",
+              "name": "location",
+              "type": "string",
+              "value": "={{ $('Loop Locations').item.json['Location'] }}"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "362f7ac8-96c5-4a7c-8d14-2cac51e3efdc",
+      "name": "Set Location",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        736,
+        688
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://places.googleapis.com/v1/places:searchText",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Goog-FieldMask",
+              "value": "places.id,places.displayName,places.formattedAddress,places.websiteUri"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ textQuery: $json.Niches + ' in ' + $json.location, pageSize: 5 }) }}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "7bc1a068-b841-4f5c-8e96-f11bca6e54f6",
+      "name": "GMaps API",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        928,
+        688
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "7424452f-e208-4e7e-8144-d0c6278bc0f0",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              },
+              "leftValue": "={{ !($json.body && Array.isArray($json.body.places) && $json.body.places.length > 0) }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a0059787-4c93-4f5c-8571-b683c6f93d19",
+      "name": "If Empty",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1136,
+        688
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "jsCode": "// Split the Places API response into one item per place.\nconst places = items[0]?.json?.body?.places || [];\nconst output = [];\nfor (let i = 0; i < places.length; i++) {\n  output.push({\n    json: { place: places[i] },\n    pairedItem: { item: 0 }\n  });\n}\nreturn output;\n"
+      },
+      "id": "95184f90-5349-400e-8b1c-0f68676367bb",
+      "name": "Place Array",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        1328,
+        752
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "758ff896-7cd8-4f72-bfbb-e64583c5937c",
+              "name": "places.id",
+              "type": "string",
+              "value": "={{ $json.place.id }}"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "d7fc61ed-1eb3-433d-bb18-b1dffd34017e",
+      "name": "Set Place ID",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1536,
+        752
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "compare": "selectedFields",
+        "fieldsToCompare": "place.id,places.id",
+        "options": {}
+      },
+      "id": "40b0991e-62e9-4c9d-9384-8afe32660b85",
+      "name": "Remove Duplicates",
+      "type": "n8n-nodes-base.removeDuplicates",
+      "position": [
+        1728,
+        752
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c1a0f5b2-1111-4a10-9c01-0000000000a1",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.place.websiteUri || '' }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5b820af7-6fdb-4f03-879a-97638fc0de77",
+      "name": "Has Website?",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1920,
+        752
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.place.websiteUri }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {
+              "maxRedirects": 5
+            }
+          },
+          "response": {
+            "response": {
+              "neverError": true,
+              "responseFormat": "text"
+            }
+          },
+          "timeout": 8000
+        }
+      },
+      "id": "9b3500ef-1afa-4f87-a949-dba57253a6aa",
+      "name": "Fetch Website",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        2112,
+        688
+      ],
+      "typeVersion": 4.2,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Merge the scraped website HTML with the original place item and pull out a contact email.\nconst base = $json.place ? $json : $('Remove Duplicates').item.json;\nconst raw = $json.place ? '' : (typeof $json.data === 'string' ? $json.data : '');\nlet text = raw.slice(0, 600000);\ntry { text = decodeURIComponent(text.replace(/%(?![0-9A-Fa-f]{2})/g, '%25')); } catch (e) {}\ntext = text.replace(/\\s?[\\[\\(]at[\\]\\)]\\s?/gi, '@').replace(/&#0*64;|&commat;/gi, '@');\nconst found = text.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}/g) || [];\nconst junk = /\\.(png|jpe?g|gif|svg|webp|css|js|woff2?|ico)$|sentry|wixpress|example\\.|yourdomain|domain\\.com|schema\\.org|u003e|noreply|no-reply/i;\nconst emails = [...new Set(found.map(e => e.toLowerCase().replace(/^[^a-z0-9]+/, '')).filter(e => !junk.test(e)))];\nlet host = '';\ntry { host = new URL(base.place.websiteUri).hostname.replace(/^www\\./, ''); } catch (e) {}\nconst preferred = emails.find(e => host && e.endsWith('@' + host)) || emails.find(e => /^(info|contact|hello|sales|office|support)@/.test(e)) || emails[0] || '';\nreturn { json: { ...base, Email: preferred, allEmails: emails.join(', ') } };\n"
+      },
+      "id": "6da25102-b222-4c6d-afac-4bd786c723e7",
+      "name": "Extract Email",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        2320,
+        752
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_URL",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Results",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Address": "={{ $('Extract Email').item.json.place.formattedAddress }}",
+            "Name": "={{ $('Extract Email').item.json.place.displayName?.text }}",
+            "Place ID": "={{ $('Extract Email').item.json.place.id }}",
+            "Location": "={{ $('Set Location').item.json.location }}",
+            "Category": "={{ $('Set Location').item.json.Niches }}",
+            "Email": "={{ $('Extract Email').item.json.Email || '' }}"
+          },
+          "matchingColumns": [
+            "Place ID"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Address",
+              "displayName": "Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Place ID",
+              "displayName": "Place ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Location",
+              "displayName": "Location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "edaafaa2-73d7-46f0-99cb-cbc7da83aad4",
+      "name": "Add rows in Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        2528,
+        752
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Exponential backoff for the Results sheet write.\n// The retry count travels with the item coming back from 'Check Max Retries1'.\nconst maxRetries = 5;\nconst initialDelay = 1; // seconds\nlet retryCount = 0;\ntry {\n  retryCount = Number($('Check Max Retries1').item.json.retryCount) || 0;\n} catch (e) {\n  retryCount = 0; // first failure for this item\n}\n\nif (retryCount < maxRetries) {\n  const delay = initialDelay * Math.pow(2, retryCount);\n  console.log(`Waiting for ${delay} seconds before retry...`);\n  return { json: { retryCount: retryCount + 1, waitTimeInSeconds: delay, status: 'retrying' } };\n}\nreturn { json: { error: 'Max retries exceeded', retryCount: retryCount, waitTimeInSeconds: 0, status: 'failed' } };\n"
+      },
+      "id": "e03ff9bc-dc46-41df-9d31-4455e11d60c2",
+      "name": "Exponential Backoff",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        2720,
+        752
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "amount": "={{ $json.waitTimeInSeconds }}"
+      },
+      "id": "ac2da31c-3d45-46b6-8e99-70aa294f619a",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        2928,
+        752
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "51e191cb-af20-423b-9303-8523caa4ae0d",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.status || '' }}",
+              "rightValue": "failed"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ad9a7833-1a37-46a1-ac06-86ce6aae8ba0",
+      "name": "Check Max Retries1",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        3120,
+        752
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "errorMessage": "Google Sheets API Limit has been triggered and the workflow has stopped"
+      },
+      "id": "acb59cb9-e8b0-41ef-9cc5-14f67ca4f953",
+      "name": "Stop and Error1",
+      "type": "n8n-nodes-base.stopAndError",
+      "position": [
+        3328,
+        752
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_URL",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Briefing",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "Success",
+            "Location": "={{ $('Loop Locations').item.json['Location'] }}"
+          },
+          "matchingColumns": [
+            "Location"
+          ],
+          "schema": [
+            {
+              "id": "Location",
+              "displayName": "Location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "2051eb5a-577c-4128-8773-114b29865c3b",
+      "name": "Update Status to Success",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        432,
+        864
+      ],
+      "executeOnce": true,
+      "typeVersion": 4.2,
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Exponential backoff for the Briefing sheet status update.\n// The retry count travels with the item coming back from 'Check Max Retries'.\nconst maxRetries = 5;\nconst initialDelay = 1; // seconds\nlet retryCount = 0;\ntry {\n  retryCount = Number($('Check Max Retries').item.json.retryCount) || 0;\n} catch (e) {\n  retryCount = 0; // first failure for this item\n}\n\nif (retryCount < maxRetries) {\n  const delay = initialDelay * Math.pow(2, retryCount);\n  console.log(`Waiting for ${delay} seconds before retry...`);\n  return { json: { retryCount: retryCount + 1, waitTimeInSeconds: delay, status: 'retrying' } };\n}\nreturn { json: { error: 'Max retries exceeded', retryCount: retryCount, waitTimeInSeconds: 0, status: 'failed' } };\n"
+      },
+      "id": "a8d95d0b-195e-451e-a577-fe3cbfa3a8a9",
+      "name": "Exponential Backoff1",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        624,
+        1040
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "amount": "={{ $json.waitTimeInSeconds }}"
+      },
+      "id": "3560000a-f1c3-4322-8ac0-b995cb1c14f1",
+      "name": "Wait1",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        816,
+        1040
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "51e191cb-af20-423b-9303-8523caa4ae0e",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.status || '' }}",
+              "rightValue": "failed"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "065c4e5d-00fb-4808-a238-edf80ceed01b",
+      "name": "Check Max Retries",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1024,
+        1040
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "errorMessage": "Google Sheets API Limit has been triggered and the workflow has stopped"
+      },
+      "id": "65ad4426-3f94-431b-a5e1-203ec7fa88bb",
+      "name": "Stop and Error",
+      "type": "n8n-nodes-base.stopAndError",
+      "position": [
+        1216,
+        1040
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a7d30003-0000-4000-8000-000000000011",
+              "name": "maxEmails",
+              "type": "number",
+              "value": 3
+            },
+            {
+              "id": "a7d30003-0000-4000-8000-000000000012",
+              "name": "agencyName",
+              "type": "string",
+              "value": "YOUR_AGENCY_NAME"
+            },
+            {
+              "id": "a7d30003-0000-4000-8000-000000000013",
+              "name": "senderEmail",
+              "type": "string",
+              "value": "your-email@example.com"
+            },
+            {
+              "id": "a7d30003-0000-4000-8000-000000000014",
+              "name": "subject",
+              "type": "string",
+              "value": "Would you like to work with us, [Business Name]?"
+            },
+            {
+              "id": "a7d30003-0000-4000-8000-000000000015",
+              "name": "bodyTemplate",
+              "type": "string",
+              "value": "<p>Hi [Business Name] team,</p><p>I'm reaching out from <b>[Agency Name]</b>. We're a digital solutions agency helping local businesses grow online with:</p><ul><li>Website design &amp; development</li><li>SEO &amp; Google Maps ranking</li><li>Social media &amp; ad campaigns</li><li>Branding &amp; business automation</li></ul><p><b>Would you like to work with us?</b> Just reply to this email and we'll set up a free 15-minute consultation.</p><p>Best regards,<br>[Agency Name]<br>your-email@example.com</p><p style='font-size:12px;color:#888'>Not interested? Reply with 'unsubscribe' and we won't contact you again.</p>"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "68873156-e73e-4969-851f-b8bd9bfef536",
+      "name": "Outreach Settings",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        528,
+        1760
+      ],
+      "executeOnce": true,
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_URL",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Results",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "0f35fb63-ff49-4c49-ab1b-c02e6108852a",
+      "name": "GS - Get Results",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        736,
+        1760
+      ],
+      "executeOnce": true,
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a7d30006-0000-4000-8000-000000000061",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.Email || '' }}",
+              "rightValue": ""
+            },
+            {
+              "id": "a7d30006-0000-4000-8000-000000000064",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              },
+              "leftValue": "={{ $json.Email || '' }}",
+              "rightValue": "@"
+            },
+            {
+              "id": "a7d30006-0000-4000-8000-000000000062",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              },
+              "leftValue": "={{ $json['Outreach Status'] || '' }}",
+              "rightValue": "Sent"
+            },
+            {
+              "id": "a7d30006-0000-4000-8000-000000000063",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              },
+              "leftValue": "={{ $json['Outreach Status'] || '' }}",
+              "rightValue": "Failed"
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "f5513a2d-4b8f-4282-8207-de7c3ba38a2f",
+      "name": "Filter Leads",
+      "type": "n8n-nodes-base.filter",
+      "position": [
+        944,
+        1760
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "maxItems": "={{ $('Outreach Settings').first().json.maxEmails }}"
+      },
+      "id": "fd1a12dc-be9f-4582-95df-0939a8a7bf98",
+      "name": "Email Limit",
+      "type": "n8n-nodes-base.limit",
+      "position": [
+        1136,
+        1760
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a7d30008-0000-4000-8000-000000000081",
+              "name": "emailSubject",
+              "type": "string",
+              "value": "={{ $('Outreach Settings').first().json.subject.replaceAll('[Business Name]', $json.Name || 'there') }}"
+            },
+            {
+              "id": "a7d30008-0000-4000-8000-000000000082",
+              "name": "emailBody",
+              "type": "string",
+              "value": "={{ $('Outreach Settings').first().json.bodyTemplate.replaceAll('[Business Name]', $json.Name || 'there').replaceAll('[Agency Name]', $('Outreach Settings').first().json.agencyName) }}"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "1a3b3991-0d18-420b-839b-36d8bcec7ba9",
+      "name": "Build Email",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1328,
+        1760
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "={{ $json.emailSubject }}",
+        "message": "={{ $json.emailBody }}",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "={{ $('Outreach Settings').first().json.agencyName }}",
+          "replyTo": "={{ $('Outreach Settings').first().json.senderEmail }}"
+        }
+      },
+      "id": "6c7bed38-b117-4186-b2e1-9dff1a211968",
+      "name": "Send Pitch Email",
+      "type": "n8n-nodes-base.gmail",
+      "position": [
+        1536,
+        1760
+      ],
+      "typeVersion": 2.1,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_URL",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Results",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Place ID": "={{ $('Build Email').item.json['Place ID'] }}",
+            "Outreach Status": "Sent",
+            "Sent At": "={{ $now.toISO() }}",
+            "Name": "={{ $('Build Email').item.json.Name }}",
+            "Address": "={{ $('Build Email').item.json.Address }}",
+            "Location": "={{ $('Build Email').item.json.Location }}",
+            "Category": "={{ $('Build Email').item.json.Category }}",
+            "Email": "={{ $('Build Email').item.json.Email }}"
+          },
+          "matchingColumns": [
+            "Place ID"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Address",
+              "displayName": "Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Place ID",
+              "displayName": "Place ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Location",
+              "displayName": "Location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Outreach Status",
+              "displayName": "Outreach Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Sent At",
+              "displayName": "Sent At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "698019e4-1693-4064-8672-c79f9b651765",
+      "name": "Mark Sent",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        1776,
+        1536
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_URL",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Results",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Place ID": "={{ $('Build Email').item.json['Place ID'] }}",
+            "Outreach Status": "Failed",
+            "Sent At": "={{ $now.toISO() }}"
+          },
+          "matchingColumns": [
+            "Place ID"
+          ],
+          "schema": [
+            {
+              "id": "Place ID",
+              "displayName": "Place ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Outreach Status",
+              "displayName": "Outreach Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Sent At",
+              "displayName": "Sent At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "d109cb6a-dcae-442e-a415-ca08c97b5754",
+      "name": "Mark Failed",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        1776,
+        1824
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "content": "# Umer Khan\n\n#### I’m Umer Khan, Software engineer and entrepreneur.\n\n\n### My Portfolio\n[umerkhan.framer.website](https://umerkhan.framer.website)\n\n",
+        "height": 2000,
+        "width": 250,
+        "color": 6
+      },
+      "id": "259a3365-4685-4c3c-81a6-0124846da942",
+      "name": "Sticky Note20",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# Fetch Google Maps API",
+        "height": 880,
+        "width": 3360,
+        "color": 5
+      },
+      "id": "4f2ff784-fc98-4211-9eb5-7c35ec3fcab2",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        272,
+        528
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# Data Preprocessing",
+        "height": 500,
+        "width": 3360,
+        "color": 4
+      },
+      "id": "57ec4535-5f32-4744-9f7a-b2d07f4873f9",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        272,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# Gmail Outreach",
+        "height": 560,
+        "width": 3360,
+        "color": 3
+      },
+      "id": "bded7085-4854-4478-8580-d6b5b3b0b4cf",
+      "name": "Sticky Note Outreach",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        272,
+        1440
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "pinData": {
+    "When clicking \"Execute Workflow\"": [
+      {
+        "json": {},
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Settings": {
+      "main": [
+        [
+          {
+            "node": "GS - Get Locations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GS - Get Locations": {
+      "main": [
+        [
+          {
+            "node": "Locations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Locations": {
+      "main": [
+        [
+          {
+            "node": "Filter Locations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Locations": {
+      "main": [
+        [
+          {
+            "node": "Set Row Number",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Row Number": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Locations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Locations": {
+      "main": [
+        [
+          {
+            "node": "Outreach Settings",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GS - Get Niches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GS - Get Niches": {
+      "main": [
+        [
+          {
+            "node": "Filter Niches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Niches": {
+      "main": [
+        [
+          {
+            "node": "Set Niche",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Niche": {
+      "main": [
+        [
+          {
+            "node": "Loop Niches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Niches": {
+      "main": [
+        [
+          {
+            "node": "Update Status to Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set Location",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Location": {
+      "main": [
+        [
+          {
+            "node": "GMaps API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GMaps API": {
+      "main": [
+        [
+          {
+            "node": "If Empty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Empty": {
+      "main": [
+        [
+          {
+            "node": "Loop Niches",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Place Array",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Place Array": {
+      "main": [
+        [
+          {
+            "node": "Set Place ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Place ID": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Duplicates": {
+      "main": [
+        [
+          {
+            "node": "Has Website?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Website?": {
+      "main": [
+        [
+          {
+            "node": "Fetch Website",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Website": {
+      "main": [
+        [
+          {
+            "node": "Extract Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Email": {
+      "main": [
+        [
+          {
+            "node": "Add rows in Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add rows in Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Loop Niches",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Exponential Backoff",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Exponential Backoff": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Check Max Retries1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Max Retries1": {
+      "main": [
+        [
+          {
+            "node": "Stop and Error1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Add rows in Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Status to Success": {
+      "main": [
+        [
+          {
+            "node": "Loop Locations",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Exponential Backoff1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Exponential Backoff1": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Check Max Retries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Max Retries": {
+      "main": [
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Status to Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Outreach Settings": {
+      "main": [
+        [
+          {
+            "node": "GS - Get Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GS - Get Results": {
+      "main": [
+        [
+          {
+            "node": "Filter Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Leads": {
+      "main": [
+        [
+          {
+            "node": "Email Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Limit": {
+      "main": [
+        [
+          {
+            "node": "Build Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Email": {
+      "main": [
+        [
+          {
+            "node": "Send Pitch Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Pitch Email": {
+      "main": [
+        [
+          {
+            "node": "Mark Sent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mark Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "nodeGroups": [],
+  "tags": []
+}
