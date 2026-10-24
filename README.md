@@ -6,7 +6,7 @@ Lead Scout is an n8n-powered business discovery and lead generation workflow tha
 
 Define your target locations and business niches, let the workflow discover matching businesses, and collect the results in a structured output sheet. Lead Scout reduces repetitive research and creates a foundation for scalable outreach, offering an alternative to manually searching for prospects and sending cold emails one by one.
 
-![Lead Scout Demo](asset/demo.png)
+![Lead Scout Demo](asset/screenshot.png)
 
 ## Features
 
